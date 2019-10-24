@@ -1,0 +1,57 @@
+  <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Test AJAX page</title>
+  <link rel="stylesheet" type="text/css" href="./lab_styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="wrapper">
+      <div class="header">Test AJAX page</div>
+      <button class="button" onclick="loadData()">Load Some JSON</button>
+      <div class="content"></div>
+      <div class="footer"></div>
+    </div>
+  </div>
+  <script>
+
+    //document.querySelector(".content").innerText = data
+    function loadData() {
+
+      country_list = []
+      
+      fetch('ajax_sample.json')
+        .then(res => res.json())
+        .then(data => data.map(c => c.name + ":" + c.code))
+        .then(data => randomList(data) );
+    }
+
+
+    function randomList(countryList) {
+
+            // console.log(countryList)
+            divContent = document.querySelector('.content'); // Get div class = content
+            indexChoices = []   // list of index choices to avoid selecting same country when randomly selecting
+            for(i=0;i<countryList.length;i++){
+              indexChoices.push(i);
+            }
+            htmlList = "";   // string to store HTML list
+            i = 0;
+            while(i<15){
+              randomIndex = Math.floor((Math.random() * (countryList.length-1)) + 1);   // chose random number between 0 and length of countryList
+              if( indexChoices[randomIndex] != -1 ){       // if indexChoice element is -1, then the country in the countryList with that index has already been chosen
+                htmlList += "<li>" +countryList[randomIndex] + "</li>";   // start making HTML list by appending <li> element 
+                indexChoices[randomIndex] = -1;    // Set indexChoice as -1 to avoid selecting that index again during random selection
+                i = i+1;    // increase loop index by 1
+              }
+            }
+            ordererdList = "<ol>"+htmlList+"</ol>";   // Make orderedList
+            divContent.innerHTML = ordererdList;   // Put orderedList in div content
+
+}
+  </script>
+</body>
+
+</html>
