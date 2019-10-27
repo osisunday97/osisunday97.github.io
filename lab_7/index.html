@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Test AJAX page</title>
+    <link rel="stylesheet" type="text/css" href="./lab_styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div class="header">UMD Bus Routes</div>
+            <button class="button" onclick="loadData()">Load Some JSON</button>
+            <div class="content"></div>
+            <div class="footer"></div>
+        </div>
+    </div>
+    <script>
+        function loadData() {
+            fetch('https://api.umd.io/v0/bus/routes')
+                .then(res => {
+                    console.log(res)
+                    return res;
+                })
+                .then(res => res.json())
+                .then(res => {
+                    data = "<ul>"
+                    for (i = 0; i < res.length; i = i + 1) {
+                        data = data + "<li>" + res[i].route_id + ", " + res[i].title + "</li>";
+                    }
+                    data = data + "</ul>"
+                    document.querySelector(".content").innerHTML = data;
+                    return res;
+                })
+                .then(res => {
+                    route_id = "117"
+                    var found = res.find(function(element) {
+                        return element.route_id == route_id;
+                    });
+                    document.querySelector('.header').innerHTML = "UMD Bus Route" + found.route_id + " " + found.title;
+                    return res;
+                }).then(res => {
+                    console.log(res);
+                })
+        }
+    </script>
+</body>
+
+</html>
